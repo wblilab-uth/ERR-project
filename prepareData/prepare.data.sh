@@ -134,10 +134,10 @@ tail -n +2 ICGC.release28.WGS.refGene.tss.promoter.10k.count.1 | sed 's?|?\t?' |
 
 
 ####
-# prepare input for extended.Fig.8a.plot.R
+# prepare input for extended.Fig.9a.plot.R
 awk '$6!=-1' ICGC.release28.WGS.refGene.tss.txt | cut -f 4,11 | \
     sed 's?|?\t?;s?|?\t?;s?|?\t?;' | cut -f 1-3,5 > ICGC.release28.WGS.refGene.tss.dis.sim.txt
-# Rscript extended.Fig.8a.plot.R
+# Rscript extended.Fig.9a.plot.R
 ####
 # make MAF file for oncoplot
 awk '$6!=-1' ICGC.release28.WGS.refGene.tss.txt | sed 's?|?\t?;s?|?\t?;s?|?\t?;s?|?\t?;s?|?\t?;s?|?\t?;' | \
@@ -149,7 +149,7 @@ head -1 ICGC.release28.WGS.refGene.tss.detail.promoter.maf > ICGC.release28.WGS.
 awk '$6!=-1 && $11>-1000 && $11<1000' ICGC.release28.WGS.refGene.tss.txt | sed 's?|?\t?;s?|?\t?;s?|?\t?;s?|?\t?;s?|?\t?;s?|?\t?;' | \
     awk -F"\t" -vOFS="\t" '{type="TSS+(-1000,1000)";print $13,$1,$2,$3,$8,$9,$7,type,$4"|"$5}' \
     >> ICGC.release28.WGS.refGene.tss.promoter.maf
-# Rscript extended.Fig.8efg.plot.R
+# Rscript extended.Fig.9efg.plot.R
 
 ####
 # scan CTCF motif and find out CTCF-motif-disrupting mutation

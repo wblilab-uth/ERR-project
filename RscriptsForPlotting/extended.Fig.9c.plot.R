@@ -5,7 +5,7 @@ library(data.table)
 library(ggpubr)
 
 `%notin%` <- Negate(`%in%`)
-selectedgenes <- fread("cripsr.genes", header = T)
+selectedgenes <- fread("otherlist/cripsr.genes", header = T)
 # read in general data ----------------------------------------------------------
 cancersites <- fread("ICGC/ICGC.cancers", header = F)
 setorder(cancersites, V3, V1)
