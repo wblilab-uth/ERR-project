@@ -8,17 +8,11 @@ perl unique_tss_bed.pl hg19.refGene.tss.srt.bed | \
 	bedtools sort -i - > hg19.refGene.tss.uniq.srt.bed
 
 ################### GRO-seq ###################
-
+# bowtie2; HOMER;
 
 ################### ChIA-PET ###################
 # GSE39495 
-perl put_tags_fc_together.pl RAD21.5000.K562.Pol2.pairs RAD21DN_1019eRNAs_FDR0.05.txt RAD21UP_1092RefSeq_condenseGenesADD3.txt > RAD21.5000.K562.Pol2.txt
-perl put_tags_fc_together.pl RAD21.5000.MCF-7.Pol2.pairs RAD21DN_1019eRNAs_FDR0.05.txt RAD21UP_1092RefSeq_condenseGenesADD3.txt > RAD21.5000.MCF-7.Pol2.txt
-cat RAD21.5000.*.txt | sort | uniq > RAD21.5000.Pol2.u.txt
-cut -f 5-7 RAD21.5000.Pol2.u.txt > RAD21.5000.Pol2.u.num.txt
-
-grep "MCF-7.Pol2" RAD21.5000.Pol2.u.txt  | cut -f 5-7 > RAD21.5000.MCF-7.Pol2.u.num.txt
-
+bedtools window -w 5000 -a ChIA-PET.tag -b GROseq
 
 ################### CTCF motif ###################
 # random regions by bedtools
@@ -53,8 +47,8 @@ bedtools intersect -wao -a eRNA.all.srt.bed -b $motif.$peaks.100 | \
 	awk '$(NF-6)!="."' > overlap.eRNA.all.$fac
 bedtools intersect -wao -a gene.all.srt.bed -b $motif.$peaks.100 | \
 	awk '$(NF-6)!="."' > overlap.gene.all.$fac
-perl ~/myScripts/add_any_2files_together.pl overlap.eRNA.all.$fac RAD21.5000.MCF-7.all.pairs 3 5 > RAD21.5000.MCF-7.all.pairs.$fac.eRNA
-perl ~/myScripts/add_any_2files_together.pl overlap.gene.all.$fac RAD21.5000.MCF-7.all.pairs.$fac.eRNA 3 9 > RAD21.5000.MCF-7.all.pairs.$fac.eRNA.gene
+perl prepareData/add_any_2files_together.pl overlap.eRNA.all.$fac RAD21.5000.MCF-7.all.pairs 3 5 > RAD21.5000.MCF-7.all.pairs.$fac.eRNA
+perl prepareData/add_any_2files_together.pl overlap.gene.all.$fac RAD21.5000.MCF-7.all.pairs.$fac.eRNA 3 9 > RAD21.5000.MCF-7.all.pairs.$fac.eRNA.gene
 cut -f 1-10,18-19,22,31-32,35 RAD21.5000.MCF-7.all.pairs.$fac.eRNA.gene > RAD21.5000.MCF-7.all.pairs.$fac.eRNA.gene.sim
 grep -v "/" RAD21.5000.MCF-7.all.pairs.$fac.eRNA.gene.sim > RAD21.5000.MCF-7.all.pairs.$fac.eRNA.gene.sim.paired
 awk '{print $3":"$4":"$5":"$6":"$7":"$8":"$9":"$10"\t"$11"\t"$12"\t"$13"\t"$14"\t"$15"\t"$16}' RAD21.5000.MCF-7.all.pairs.$fac.eRNA.gene.sim | sort | uniq > RAD21.5000.MCF-7.all.pairs.$fac
@@ -73,10 +67,11 @@ cut -f 1-10,18-19,22,31-32,35 RAD21.5000.MCF-7.all.pairs.$fac.eRNA.gene > RAD21.
 grep -v "/" RAD21.5000.MCF-7.all.pairs.$fac.eRNA.gene.sim > RAD21.5000.MCF-7.all.pairs.$fac.eRNA.gene.sim.paired
 awk '{print $3":"$4":"$5":"$6":"$7":"$8":"$9":"$10"\t"$11"\t"$12"\t"$13"\t"$14"\t"$15"\t"$16}' RAD21.5000.MCF-7.all.pairs.$fac.eRNA.gene.sim | sort | uniq > RAD21.5000.MCF-7.all.pairs.$fac
 
-perl ~/myScripts/add_any_2files_together.pl RAD21.5000.MCF-7.all.pairs.CTCF RAD21.5000.MCF-7.all.pairs.ESR1 0 0 | cut -f 1-7,9- > RAD21.5000.MCF-7.all.pairs.CTCF.ESR1
-perl ~/myScripts/add_any_2files_together.pl RAD21.5000.MCF-7.all.pairs.CTCF.ESR1 RAD21.5000.MCF-7.all.pairs.FOXA1 0 0 | cut -f 1-7,9- > RAD21.5000.MCF-7.all.pairs.CTCF.ESR1.FOXA1
+perl prepareData/add_any_2files_together.pl RAD21.5000.MCF-7.all.pairs.CTCF RAD21.5000.MCF-7.all.pairs.ESR1 0 0 | cut -f 1-7,9- > RAD21.5000.MCF-7.all.pairs.CTCF.ESR1
+perl prepareData/add_any_2files_together.pl RAD21.5000.MCF-7.all.pairs.CTCF.ESR1 RAD21.5000.MCF-7.all.pairs.FOXA1 0 0 | cut -f 1-7,9- > RAD21.5000.MCF-7.all.pairs.CTCF.ESR1.FOXA1
 sort RAD21.5000.MCF-7.all.pairs.CTCF.ESR1.FOXA1 | uniq | sed 's/:/\t/g' > RAD21.5000.MCF-7.all.pairs.final
 
 # RAD21.5000.MCF-7.all.pairs.CTCF.FOXA1
 ######
-perl ~/myScripts/add_any_2files_together.pl RAD21.5000.MCF-7.all.pairs.CTCF RAD21.5000.MCF-7.all.pairs.FOXA1 0 0 | cut -f 1-7,9- | sort | uniq | sed 's/:/\t/g' > RAD21.5000.MCF-7.all.pairs.CTCF.FOXA1
+perl prepareData/add_any_2files_together.pl RAD21.5000.MCF-7.all.pairs.CTCF RAD21.5000.MCF-7.all.pairs.FOXA1 0 0 | cut -f 1-7,9- | sort | uniq | sed 's/:/\t/g' > RAD21.5000.MCF-7.all.pairs.CTCF.FOXA1
+
